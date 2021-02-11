@@ -160,9 +160,9 @@ semodule -X 300 -i traefik.pp
 mkdir -p /etc/systemd/system/podman.socket.d
 cat <<EOF > /etc/systemd/system/podman.socket.d/override.conf
 [Socket]
-Group=traefik
+SocketGroup=traefik
 EOF
-systemctl enable --now  podman.socket
 
 systemctl daemon-reload
+systemctl enable --now  podman.socket
 systemctl enable --now traefik.service
