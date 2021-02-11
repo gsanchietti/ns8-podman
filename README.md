@@ -5,11 +5,11 @@ The following scripts will install podman and traefik on a CentOS 8 machine.
 Current configuration:
 - podman 3 installed from unstable repository to support traefik integration
 - traefik is running as native service with unpriviliged user
-- iptables instead of ngtables, all traffic is accepted
+- use iptables instead of nftables, all traffic is accepted
 
 Modules like dokuwiki will use valid Let's Encrypt certificate, so the machine must:
 - be accessible on port 80 from Let's Encrypt servers
-- have a valid DNS public record for each service
+- have a valid public DNS record for each service
 
 ## Install
 
@@ -24,5 +24,5 @@ The setup script should be safe enough to be called multiple times.
 
 Other files:
 - ``dokuwiki.sh``: configure a dokuwiki instance with valid SSL certificate, persistence and redirection from HTTP to HTTPs
-    Host for the dokuwiki is ``dokuwiki.<fqdn>``, make sure to have a valid DNS public record for it
+    Host for the dokuwiki is ``dokuwiki.<fqdn>``, make sure to have a valid public DNS record for it
   
