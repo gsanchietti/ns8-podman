@@ -17,7 +17,7 @@ Modules like dokuwiki will use valid Let's Encrypt certificate, so the machine m
 dnf install git -y
 git clone https://github.com/gsanchietti/ns8-podman.git
 cd ns8-podman
-./podman-setup.sh
+./setup.sh
 ```
 
 The setup script should be safe enough to be called multiple times.
