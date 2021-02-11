@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOMAIN=$(hostname -d)
+HOST=$(hostname -f)
 
 # Configure firewall: disable ntftable and accept all traffic
 dnf install -y iptables-services
@@ -84,7 +84,7 @@ tls:
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: rood@$DOMAIN
+      email: root@$HOST
       storage: /etc/traefik/acme/acme.json
       httpChallenge:
         entryPoint: http
