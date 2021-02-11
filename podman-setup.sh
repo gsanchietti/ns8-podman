@@ -38,6 +38,7 @@ if [ ! -f /usr/local/bin/traefik ]; then
     wget https://github.com/traefik/traefik/releases/download/v2.4.2/traefik_v2.4.2_linux_amd64.tar.gz
     tar xvzf traefik_v2.4.2_linux_amd64.tar.gz
     mv traefik /usr/local/bin
+    restorecon -irv /usr/local/bin/traefik
     rm -f traefik_v2.4.2_linux_amd64.tar.gz
 fi
 
