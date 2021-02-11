@@ -3,7 +3,7 @@
 # DOC: https://github.com/bitnami/bitnami-docker-dokuwiki#configuration
 
 N=ns-dokuwiki
-HOST=dokuwiki.$(hostname -d)
+HOST=dokuwiki.$(hostname -f)
 DIR=/var/lib/nethserver/dokuwiki
 
 # configure persistente dir

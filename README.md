@@ -22,5 +22,5 @@ cd ns8-podman
 
 Other files:
 - ``dokuwiki.sh``: configure a dokuwiki instance with valid SSL certificate, persistence and redirection from HTTP to HTTPs
-    Host for the dokuwiki is ```dokuwiki.<domain>``
+    Host for the dokuwiki is ``dokuwiki.<fqdn>``
   
