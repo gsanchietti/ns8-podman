@@ -22,7 +22,22 @@ cd ns8-podman
 
 The setup script should be safe enough to be called multiple times.
 
-Other files:
-- ``dokuwiki.sh``: configure a dokuwiki instance with valid SSL certificate, persistence and redirection from HTTP to HTTPs
-    Host for the dokuwiki is ``dokuwiki.<fqdn>``, make sure to have a valid public DNS record for it
+#### Redis
+
+First, start redis by executing: `./redis.sh`
+
+### Dokuwiki
+
+Put the configuration on REDIS:
+```
+redis-cli hmset service/dokuwiki/env DOKUWIKI_USER admin
+redis-cli SADD service/dokuwiki/paths /var/lib/nethserver/dokuwiki:1001:1001
+redis-cli SADD service/dokuwiki/volumes /var/lib/nethserver/dokuwiki:/bitnami/dokuwiki
+redis-cli SET service/dokuwiki/hostname mywiki.nethserver.org
+```
+
+Then start the pod: `./dokuwiki.sh`
+
+The script will start a dokuwiki instance with valid SSL certificate, persistence and redirection from HTTP to HTTPs
+Default host for the dokuwiki is ``dokuwiki.<fqdn>``, make sure to have a valid DNS public record for it.
   
