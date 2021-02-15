@@ -1,0 +1,17 @@
+#!/bin/bash
+
+while read -r line
+do
+    service=$(echo $line | cut -d'/' -f 2)
+    status=$(redis-cli --raw GET $line)
+    if [[ "$status" == "enabled" ]]; then
+        echo "Starting $service"
+        podman pod stop $service-pod 2>/dev/null
+        podman pod rm $service-pod 2>/dev/null
+        ./services/$service.sh
+    else
+        echo "Stopping $service"
+        podman pod stop $service-pod 2>/dev/null
+        podman pod rm $service-pod 2>/dev/null
+    fi
+done < <(redis-cli --raw KEYS service/*/status)

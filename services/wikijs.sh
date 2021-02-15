@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# DOC: https://github.com/bitnami/bitnami-docker-dokuwiki#configuration
+# DOC: https://docs.requarks.io/install/docker
 
-N=ns-dokuwiki
+N=wikijs
 
 # configure environment variable
-# example: redis-cli hmset service/dokuwiki/env DOKUWIKI_USER admin
+# example: redis-cli hmset service/wikijs/env DOKUWIKI_USER admin
 i=0
 envs=''
 while read -r line
@@ -19,11 +19,11 @@ do
         envs="$envs -e $line"
     fi
     i=$((i+1))
-done < <(redis-cli --raw hgetall service/dokuwiki/env)
+done < <(redis-cli --raw hgetall service/wikijs/env)
 
 # configure persistente dir
 # expected format: /path/:uid:gid
-# example: redis-cli SADD service/dokuwiki/paths /var/lib/nethserver/dokuwiki:1001:1001
+# example: redis-cli SADD service/wikijs/paths /var/lib/nethserver/wikijs:1001:1001
 paths=''
 while read -r line
 do
@@ -32,31 +32,33 @@ do
 
     mkdir -p $path
     chown $uid_gid $path
-done < <(redis-cli --raw SMEMBERS service/dokuwiki/paths)
+done < <(redis-cli --raw SMEMBERS service/wikijs/paths)
 
 # map volumes
 # expected format: host_path:container:path
-# example: redis-cli SADD service/dokuwiki/volumes /var/lib/nethserver/dokuwiki:/bitnami/dokuwiki
+# example: redis-cli SADD service/wikijs/volumes /var/lib/nethserver/wikijs:/bitnami/wikijs
 vols=''
 while read -r line
 do
     vols="$vols --volume $line:Z "
-done < <(redis-cli --raw  SMEMBERS service/dokuwiki/volumes)
+done < <(redis-cli --raw  SMEMBERS service/wikijs/volumes)
 
 # set virtual host name
-# example: redis-cli SET service/dokuwiki/hostname mywiki.nethserver.org
-HOST=$(redis-cli --raw GET service/dokuwiki/hostname)
+# example: redis-cli SET service/wikijs/hostname mywiki.nethserver.org
+HOST=$(redis-cli --raw GET service/wikijs/hostname)
 if [ -z "$HOST" ]; then
-    HOST=dokuwiki.$(hostname -f)
+    HOST=wikijs.$(hostname -f)
 fi
 
-podman pod stop $N-pod
-podman pod rm $N-pod
-        
 podman pod create --name $N-pod
 
 podman run -d $envs \
-	-l "traefik.http.services.$N.loadbalancer.server.port=8080" \
+    $vols \
+    --pod $N-pod --name $N-db docker.io/postgres:11-alpine
+
+
+podman run -d $envs \
+	-l "traefik.http.services.$N.loadbalancer.server.port=3000" \
 	-l "traefik.http.routers.$N-http.entrypoints=http,https" \
 	-l "traefik.http.routers.$N-http.rule=Host(\`$HOST\`)" \
 	-l "traefik.http.middlewares.http-to-https.redirectscheme.scheme=https" \
@@ -66,5 +68,4 @@ podman run -d $envs \
 	-l "traefik.http.routers.$N-https.tls=true" \
 	-l "traefik.http.routers.$N-https.tls.certresolver=letsencrypt" \
 	-l "traefik.http.routers.$N-https.tls.domains[0].main=$HOST" \
-    $vols \
-	--pod $N-pod --name $N docker.io/bitnami/dokuwiki:latest
+	--pod $N-pod --name $N docker.io/requarks/wiki:2
