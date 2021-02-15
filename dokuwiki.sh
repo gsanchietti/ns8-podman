@@ -40,7 +40,7 @@ done < <(redis-cli --raw SMEMBERS service/dokuwiki/paths)
 vols=''
 while read -r line
 do
-    vols="$vols --volume $line "
+    vols="$vols --volume $line:Z "
 done < <(redis-cli --raw  SMEMBERS service/dokuwiki/volumes)
 
 # set virtual host name
