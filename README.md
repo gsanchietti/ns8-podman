@@ -42,7 +42,7 @@ redis-cli SET service/<service>/status disabled
 
 ### Dokuwiki
 
-Configure a [Dokuwiki]/https://www.dokuwiki.org/) instance.
+Configure a [Dokuwiki](https://www.dokuwiki.org/) instance.
 
 Put the configuration on Redis:
 ```
@@ -58,7 +58,7 @@ Then start the pod: `./dokuwiki.sh`
 The script will start a dokuwiki instance with valid SSL certificate, persistence and redirection from HTTP to HTTPs
 Default host for the dokuwiki is ``dokuwiki.<fqdn>``, make sure to have a valid DNS public record for it.
 
-## Wiki.js
+### Wiki.js
 
 Configure a [Wiki.js](https://js.wiki/) instance with a Postgres database.
 
