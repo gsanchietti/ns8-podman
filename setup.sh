@@ -161,8 +161,22 @@ mkdir -p /etc/systemd/system/podman.socket.d
 cat <<EOF > /etc/systemd/system/podman.socket.d/override.conf
 [Socket]
 SocketGroup=traefik
+DirectoryMode=0777
 EOF
+# Fix tmpfiles permissions
+cat << EOF > /etc/tmpfiles.d/podman.conf
+x /tmp/podman-run-
+D! /run/podman 0770 root traefik
+D! /var/lib/cni/networks
+EOF
+systemd-tmpfiles --create /etc/tmpfiles.d/podman.conf
 
 systemctl daemon-reload
 systemctl enable --now  podman.socket
 systemctl enable --now traefik.service
+
+# Install redis-cli
+dnf install redis -y
+
+# Start redis to store the config
+./redis.sh
