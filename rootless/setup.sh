@@ -1,7 +1,5 @@
 #!/bin/bash
 
-systemctl enable --now iptables
-
 cat <<EOF > /etc/sysctl.d/podman.conf
 user.max_user_namespaces=28633
 net.ipv4.ip_unprivileged_port_start=0
