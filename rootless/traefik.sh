@@ -25,7 +25,7 @@ entryPoints:
 providers:
   redis:
     endpoints:
-      - "redis:6379"
+      - "127.0.0.1:6379"
 
 tls:
   certResolver: letsencrypt
@@ -34,7 +34,6 @@ tls:
 certificatesResolvers:
   letsencrypt:
     acme:
-      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
       email: root@$HOST
       storage: /etc/traefik/acme/acme.json
       httpChallenge:
@@ -46,7 +45,7 @@ podman stop traefik
 podman rm traefik
 
 
-podman run --network nethserver --name traefik -d -p 8080:8080 -p 80:80 \
+podman run --network=host --name traefik -d \
   -v "$HOME/traefik/config/acme:/etc/traefik/acme:Z" \
   -v "$HOME/traefik/config/traefik.yaml:/etc/traefik/traefik.yaml:Z" \
   docker.io/traefik:v2.4
