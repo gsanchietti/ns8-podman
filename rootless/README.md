@@ -16,6 +16,7 @@ Login as user `nethserver` then copy inside the home:
 
 Finally:
 ```
+podman network create nethserver
 ./redis.sh
 sleep 5
 ./traefik.sh
