@@ -24,6 +24,7 @@ cp dokuwiki.sh /home/dokwuiki
 
 Then enable redis and traefik:
 ```
+loginctl enable-linger redis
 su - redis
 ./redis.sh
 exit
